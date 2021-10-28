@@ -1,18 +1,41 @@
-import { createContext } from 'react'
+import UserContext, { UserState } from './store'
+import { useContext, useState } from 'react'
 
 
-const initialState = {
-  first: "Jenson",
-  last: "Chen"
-}
+const ConsumerComponent = () => {
+  const user = useContext<UserState>(UserContext)
 
-const context = createContext(initialState)
-
-const UseContextComponent = () => {
   return (
     <div>
-      
+      <div>First: {user.first}</div>
+      <div>Last: {user.last}</div>
     </div>
+  )
+}
+
+
+
+const UseContextComponent = () => {
+
+  const [user, userSet] = useState<UserState>({
+    first: 'Jenson',
+    last: 'Chen'
+  })
+
+  return (
+    <UserContext.Provider value={user}>
+      <ConsumerComponent />
+      <button
+        onClick={() => {
+          userSet({
+            first: 'Chih-Hao',
+            last: 'Chen'
+          })
+        }}
+      >
+        Change Context
+      </button>
+    </UserContext.Provider>
   )
 }
 
